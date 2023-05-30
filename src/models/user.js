@@ -1,38 +1,21 @@
-const mongoose = require('mongoose');
-//use password package to manage 3rd party authentication
-const passportLocalMongoose = require('passport-local-mongoose');
-const Game = require('./game');
+// models/user.js
+const mongoose = require('../config/database');
 
-
-const userSchema = new mongoose.Schema({
-    username: {
-        required: true,
-        type: String,
-        unique: true
-    },
-
-    password: {
-        required: true,
-        type: String
-    },
-
-    plays: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }]
-
-    // wins: {
-    //     type: Int16Array,
-    //     default: 0
-    // },
-
-    // losses: {
-    //     type: Int16Array,
-    //     default: 0
-    // },
-}
+// User Schema
+const userSchema = new mongoose.Schema(
+  {
+    // fullname: { type: String },
+    username: { type: String },
+    githubId: { type: String, unique: true },
+    // location: { type: String },
+    // phone: { type: String },
+    email: { type: String, lowercase: true },
+    // profilePhoto: { type: String, default: '' }
+  },
+  { timestamps: true } // Not sure what this is for
 );
 
-userSchema.plugin(passportLocalMongoose)
+// Create model from schema (kind of like tables)
+const User = mongoose.model('User', userSchema);
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = User;

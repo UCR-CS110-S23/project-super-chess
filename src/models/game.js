@@ -24,6 +24,7 @@ const gameSchema = new mongoose.Schema({
         type: [[String]]
     },
 
+    // Consideration: Maybe store comments as part of session data instead? I don't think it makes sense to show the comments after the game is over
     comments: [{
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -34,5 +35,7 @@ const gameSchema = new mongoose.Schema({
     }],
 }
 );
+
+// If new game, update winner and loser in user table with game id as ref.
 
 module.exports = mongoose.model('Game', gameSchema);
