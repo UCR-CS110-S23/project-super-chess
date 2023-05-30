@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 //use password package to manage 3rd party authentication
 const passportLocalMongoose = require('passport-local-mongoose');
+const Game = require('./game');
 
 
 const userSchema = new mongoose.Schema({
@@ -15,15 +16,20 @@ const userSchema = new mongoose.Schema({
         type: String
     },
 
-    wins: {
-        type: Int16Array,
-        default: 0
-    },
+    plays: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 
-    losses: {
-        type: Int16Array,
-        default: 0
-    },
+    // wins: {
+    //     type: Int16Array,
+    //     default: 0
+    // },
+
+    // losses: {
+    //     type: Int16Array,
+    //     default: 0
+    // },
 }
 );
 
