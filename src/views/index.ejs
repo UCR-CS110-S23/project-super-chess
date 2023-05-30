@@ -1,0 +1,11 @@
+<% if (!user) { %>
+    <h2>Welcome! <a href="/auth/github">Login with GitHub</a> </h2>
+    <h2>Or, Login with Username and Password</h2>
+    <form method="POST" action="/auth/local">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+  <% } else { %>
+    <h2>Hello, <%= user.fullname %> <a href="/account">View Account</a></h2>
+  <% } %>

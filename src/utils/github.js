@@ -12,12 +12,12 @@ module.exports = new GitHubStrategy({
 
       if (!data) return User.create({
         githubId: profile.id,
-        fullname: profile.displayName,
+        // fullname: profile.displayName,
         username: profile.username,
-        location: profile._json.location,
-        phone: profile._json.phone,
-        email: profile._json.email,
-        profilePhoto: profile._json.avatar_url
+        // location: profile._json.location,
+        // phone: profile._json.phone,
+        // email: profile._json.email,
+        // profilePhoto: profile._json.avatar_url
       }).then((data, err) => {
         return done(null, data);
       });

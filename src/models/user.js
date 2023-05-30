@@ -1,5 +1,7 @@
 // models/user.js
-const mongoose = require('../config/database');
+const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
+
 
 // User Schema
 const userSchema = new mongoose.Schema(
@@ -14,6 +16,9 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true } // Not sure what this is for
 );
+
+
+User.plugin(passportLocalMongoose);
 
 // Create model from schema (kind of like tables)
 const User = mongoose.model('User', userSchema);

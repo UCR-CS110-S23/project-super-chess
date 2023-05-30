@@ -19,7 +19,10 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
 
-// Login with account (why isn't account here?? And where is logout??)
+// Login with account on account page
 router.get('/', accountController.user);
+
+// Todo: Handle username change (auth first)
+// Todo: login with username and password
 
 module.exports = router;
