@@ -12,6 +12,13 @@ const users = [];
 const games = [];
 const comments = [];
 
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: './.env' });
+
+const app = require('./app');
+
 app.use(express.json());
 
 // POST registration request
@@ -94,12 +101,7 @@ app.delete('/account/:username', (req, res) => {
     res.sendStatus(404);
   }
 });
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 
-dotenv.config({ path: './.env' });
-
-const app = require('./app');
 
 mongoose
   .connect(process.env.DATABASE, { useUnifiedTopology: true })
