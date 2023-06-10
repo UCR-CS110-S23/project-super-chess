@@ -3,7 +3,10 @@ const mongoose = require("mongoose");
 const messageSchema = mongoose.Schema(
   {
     message: {
-      text: { type: String, required: true },
+      text: {
+        type: String,
+        required: true,
+      },
     },
     sender: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,6 +18,12 @@ const messageSchema = mongoose.Schema(
       ref: "Room",
       required: true,
     },
+    reactions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Reaction",
+      },
+    ],
   },
   {
     timestamps: true,
