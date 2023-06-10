@@ -5,7 +5,7 @@ const router = express.Router()
 module.exports = router;
 
 router.post('/login', async (req, res) => {
-    const {session} = req;
+    const { session } = req;
     const { username, password } = req.body;
 
     // check if user in database
@@ -18,9 +18,31 @@ router.post('/login', async (req, res) => {
     else {
       session.authenticated = true;
       session.username = username;
-      res.json({ msg: "Logged in", status: true });
+      res.json({ msg: "Logged in", username: username, status: true });
     }
 });
+
+// DONE: Add login functionality
+router.post('/signup',  async (req, res)=>{
+  const {username, password, name} = req.body;
+  const user = new User ({
+      username: username,
+      password: password,
+      name: name
+
+  })
+
+  try{
+      const dataSaved = await user.save();
+      res.status(200).json(dataSaved);
+  }
+  catch (error){
+      console.log(error);
+      res.send("ERROR!");
+  }
+})
+
+//Add change option
 
 // Set up a route for the logout page
 router.get('/logout', (req, res) => {
