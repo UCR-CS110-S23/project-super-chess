@@ -114,7 +114,7 @@ class Lobby extends react.Component{
 
     render(){
         return(
-            <div>
+            <div class="lobby">
                 <h1>Lobby</h1>
                 <div>
                     <Button onClick={this.logout}> Logout </Button>
