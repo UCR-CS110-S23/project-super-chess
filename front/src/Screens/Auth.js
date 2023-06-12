@@ -1,6 +1,5 @@
-import React from "react";
+import react from "react";
 import Form from "../Components/form.js";
-const qrcode = require('qrcode');
 import {
   Button,
   Grid,
@@ -9,7 +8,8 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-
+import Alert from "@mui/material/Alert";
+const qrcode = require("qrcode");
 
 const containerStyle = {
   display: "flex",
@@ -18,7 +18,7 @@ const containerStyle = {
   height: "100vh",
 };
 
-class Auth extends React.Component {
+class Auth extends react.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,75 +30,6 @@ class Auth extends React.Component {
       loading: false,
     };
   }
-
-  closeForm = () => {
-    this.setState({ showForm: false });
-  };
-
-  toggleForm = () => {
-    const newForm = this.state.selectedForm === "login" ? "register" : "login";
-    this.setState({ selectedForm: newForm });
-  };
-
-  login = (data) => {
-    console.log(data);
-    this.setState({ loading: true }); // Set loading state
-
-    fetch(this.props.server_url + "/api/auth/login", {
-      method: "POST",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.msg === "Logged in") {
-          this.props.changeScreen("lobby");
-          this.handleSnackbarOpen("Logged in successfully!", "success");
-        } else {
-          this.handleSnackbarOpen(data.msg, "error");
-        }
-      })
-      .catch(() => {
-        this.handleSnackbarOpen("Network error!", "error");
-      })
-      .finally(() => {
-        this.setState({ loading: false }); // Reset loading state
-      });
-  };
-
-  register = (data) => {
-    console.log(data);
-    this.setState({ loading: true }); // Set loading state
-
-    fetch(this.props.server_url + "/api/auth/signup", {
-      method: "POST",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.clone().json())
-      .then((data) => {
-        this.handleSnackbarOpen("Registered successfully!", "success");
-          qrcode.toDataURL(data.otpauth_url, function(err,data){
-              console.log(data);
-              document.getElementById("forQRcode").innerHTML = 'Use this QR code for 2FA <img src="' + data + '" alt="QR code"/>';
-          })      })
-      .catch(() => {
-        this.handleSnackbarOpen("Network error!", "error");
-      })
-      .finally(() => {
-        this.setState({ loading: false }); // Reset loading state
-      });
-  };
 
   handleSnackbarOpen = (message, severity) => {
     this.setState({
@@ -115,39 +46,108 @@ class Auth extends React.Component {
     });
   };
 
+  closeForm = () => {
+    this.setState({ showForm: false });
+  };
+
+  toggleForm = () => {
+    const newForm = this.state.selectedForm === "login" ? "register" : "login";
+    this.setState({ selectedForm: newForm });
+  };
+
+  login = (data) => {
+    // DONE: write codes to login
+    console.log(data);
+
+    fetch(this.props.server_url + "/api/auth/login", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header above.
+    }).then((res) => {
+      res.json().then((data) => {
+        if (data.msg === "Logged in") {
+          // this.props.changeUser(data.username);
+          this.props.changeScreen("lobby");
+        } else {
+          alert(data.msg);
+        }
+      });
+    });
+  };
+
+  register = (data) => {
+    // DONE: write codes to register
+    console.log(data);
+    fetch(this.props.server_url + "/api/auth/signup", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data), // body data type must match "Content-Type" header above.
+    }).then((res) => {
+      res
+        .clone()
+        .json()
+        .then((data) => {
+          qrcode.toDataURL(data.otpauth_url, function (err, data) {
+            console.log(data);
+            document.getElementById("forQRcode").innerHTML =
+              '<img src="' +
+              data +
+              '" alt="QR code"/><br/>Use this QR code for 2FA';
+          });
+        })
+        .catch(() => {
+          res.text().then((textData) => {
+            alert(textData);
+          });
+        });
+    });
+  };
 
   render() {
     const { showForm, selectedForm, open, message, severity, loading } =
       this.state;
 
     let display = null;
-    if (showForm) {
+    if (this.state.showForm) {
       let fields = [];
-      if (selectedForm === "login") {
-        fields = ["username", "password","OneTimePassword"];
+      if (this.state.selectedForm === "login") {
+        fields = ["username", "password", "OneTimePassword"];
+        console.log();
         display = (
           <Form
+            // sx={{ mt: 10 }}
             fields={fields}
             close={this.closeForm}
-            type="login"
+            type="Login"
             submit={this.login}
-            key={selectedForm}
+            key={this.state.selectedForm}
           />
         );
-      } else if (selectedForm === "register") {
+      } else if (this.state.selectedForm === "register") {
         fields = ["username", "password", "name"];
         display = (
-            <div>
-          <Form
-            fields={fields}
-            close={this.closeForm}
-            type="register"
-            submit={this.register}
-            key={selectedForm}
-          />
-          <div id="forQRcode"/>
-        </div>
-      );
+          <div>
+            <Form
+              //  sx={{ mb: 10 }}
+              fields={fields}
+              close={this.closeForm}
+              type="Register"
+              submit={this.register}
+              key={this.state.selectedForm}
+            />
+            <div id="forQRcode"></div>
+          </div>
+        );
       }
     } else {
       display = (
@@ -176,7 +176,6 @@ class Auth extends React.Component {
         </div>
       );
     }
-
     return (
       <div style={containerStyle}>
         <div className="welcome">
@@ -197,7 +196,7 @@ class Auth extends React.Component {
             </Snackbar>
           )}
           <Typography
-            sx={{ mb: 20 }}
+            sx={{ mb: 5 }}
             // anchorOrigin={{ vertical: "top" }}
             variant="h4"
             component="h1"

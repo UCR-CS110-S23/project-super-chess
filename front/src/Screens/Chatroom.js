@@ -103,9 +103,8 @@ class Chatroom extends React.Component {
   };
 
   componentDidMount() {
-    
     this.socket.on("chat message", (messages) => {
-      this.setState({ messages }); 
+      this.setState({ messages });
     });
   }
 

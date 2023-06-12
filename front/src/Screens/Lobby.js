@@ -183,7 +183,6 @@ class Lobby extends react.Component {
     });
   };
 
- 
   render() {
     return (
       <div style={containerStyle}>
@@ -235,9 +234,9 @@ class Lobby extends react.Component {
                 <Typography variant="h6">
                   User: {this.state.username}
                 </Typography>
-                <Button variant="contained" onClick={this.startEditingUsername}>
+                {/* <Button variant="contained" onClick={this.startEditingUsername}>
                   Edit Username
-                </Button>
+                </Button> */}
               </Box>
             )}
             <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
@@ -252,17 +251,18 @@ class Lobby extends react.Component {
                     button
                     key={room}
                     onClick={() => this.enter(room)}
+                    style={{
+                      backgroundColor: "lightgray",
+                      transition: "background-color 0.3s ease",
+                    }}
                     onMouseEnter={(e) => {
                       e.target.style.backgroundColor = "gray";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "transparent";
-                    }}
-                    style={{
-                      transition: "background-color 0.3s ease",
+                      e.target.style.backgroundColor = "lightgray";
                     }}
                   >
-                    Room {room}
+                    <span style={{ fontWeight: "bold" }}>Room {room}</span>
                   </ListItem>
                 ))}
               </List>
