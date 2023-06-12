@@ -135,3 +135,39 @@ router.put("/message/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to update message" });
   }
 });
+
+// router.put("/message/:id/thumbup", async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const message = await Message.findById(id);
+//     if (!message) {
+//       res.status(404).json({ error: "Message not found" });
+//     } else {
+//       message.thumbUp += 1; // increment the thumb up counter
+//       await message.save();
+//       res.json({ msg: "Thumb up counter updated successfully", message });
+//     }
+//   } catch (error) {
+//     console.error("Error updating thumb up counter:", error);
+//     res.status(500).json({ error: "Failed to update thumb up counter" });
+//   }
+// });
+
+// router.put("/message/:id/thumbdown", async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const message = await Message.findById(id);
+//     if (!message) {
+//       res.status(404).json({ error: "Message not found" });
+//     } else {
+//       message.thumbDown += 1; // increment the thumb down counter
+//       await message.save();
+//       res.json({ msg: "Thumb down counter updated successfully", message });
+//     }
+//   } catch (error) {
+//     console.error("Error updating thumb down counter:", error);
+//     res.status(500).json({ error: "Failed to update thumb down counter" });
+//   }
+// });
