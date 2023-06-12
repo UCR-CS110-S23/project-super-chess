@@ -1,50 +1,73 @@
-const express = require("express");
-const User = require("../model/user");
-const router = express.Router();
+const express = require('express');
+const User = require('../model/user');
+const crypto = require("crypto");
+const speakeasy = require('speakeasy');
+
+
+const router = express.Router()
 
 module.exports = router;
 
-router.post("/login", async (req, res) => {
-  const { session } = req;
-  const { username, password } = req.body;
+router.get('/getSecret', async (req, res) => {
+    const secret = speakeasy.generateSecret({ name: "CS110 Authenticator", length: 6});
+    console.log(secret);
 
-  // check if user in database
-  const user = await User.findOne({ username });
+    return res.send(secret);
+})
 
-  if (!user) return res.json({ msg: "Incorrect Username ", status: false });
-  else if (user.password !== password)
-    return res.json({ msg: "Incorrect Password", status: false });
-  else {
-    session.authenticated = true;
-    session.username = username;
-    res.json({ msg: "Logged in", username: username, status: true });
-  }
+router.post('/login', async (req, res) => {
+    const { session } = req;
+    const { username, password, OneTimePassword } = req.body;
+    /*
+    */
+
+    // check if user in database
+    const user = await User.findOne({ username: username }).exec();
+
+    console.log(user);
+    if (!user) return res.json({ msg: "Incorrect Username ", status: false });
+
+    let currentHash = crypto.pbkdf2Sync(password,
+        user.salt, 1000, 64, `sha512`).toString(`hex`);
+    if(currentHash === user.hash && speakeasy.totp.verify({secret: user.secret, encoding: 'base32', token: OneTimePassword})){
+        session.authenticated = true;
+        session.username = username;
+        res.json({ msg: "Logged in", username: username, status: true });
+    }else {
+        return res.json({ msg: "Incorrect Password", status: false });
+    }
+
 });
 
 // DONE: Add login functionality
-router.post("/signup", async (req, res) => {
-  const { username, password, name } = req.body;
-  const user = new User({
-    username: username,
-    password: password,
-    name: name,
-  });
-
-  try {
-    const dataSaved = await user.save();
-    res.status(200).json(dataSaved);
-  } catch (error) {
-    console.log(error);
-    res.send("ERROR!");
-  }
-});
+router.post('/signup',  async (req, res)=>{
+    const { username, password, name } = req.body;
+    const secret = speakeasy.generateSecret({ name: "CS110 Authenticator", length: 20});
+    console.log(secret);
+    const user = new User({
+        name: name,
+        username: username,
+        hash: password,
+        salt: "salt",
+        secret: secret.base32,
+        authURL: secret.otpauth_url
+    });
+    try{
+        let dataSaved = await user.save();
+        res.status(200).json(secret);
+    }
+    catch (error){
+        console.log(error);
+        res.send("ERROR!");
+    }
+})
 
 router.get("/current-username", (req, res) => {
-  if (req.session.authenticated) {
-    res.json({ username: req.session.username, status: true });
-  } else {
-    res.json({ msg: "Not authenticated", status: false });
-  }
+    if (req.session.authenticated) {
+        res.json({ username: req.session.username, status: true });
+    } else {
+        res.json({ msg: "Not authenticated", status: false });
+    }
 });
 
 //Add change option

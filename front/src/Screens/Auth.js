@@ -1,5 +1,7 @@
-import React from "react";
+import react from "react";
 import Form from "../Components/form.js";
+import { Button } from "@mui/material";
+const qrcode = require('qrcode');
 import {
   Button,
   Grid,
@@ -87,7 +89,10 @@ class Auth extends React.Component {
       .then((res) => res.clone().json())
       .then((data) => {
         this.handleSnackbarOpen("Registered successfully!", "success");
-      })
+          qrcode.toDataURL(data.otpauth_url, function(err,data){
+              console.log(data);
+              document.getElementById("forQRcode").innerHTML = 'Use this QR code for 2FA <img src="' + data + '" alt="QR code"/>';
+          })      })
       .catch(() => {
         this.handleSnackbarOpen("Network error!", "error");
       })
@@ -110,6 +115,32 @@ class Auth extends React.Component {
       message: "",
     });
   };
+    register = (data) => {
+        // DONE: write codes to register
+        console.log(data);
+        // let r = JSON.stringify(data);
+        fetch(this.props.server_url+"/api/auth/signup", {
+            method: "POST",
+            mode: 'cors',
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data) // body data type must match "Content-Type" header above.
+        }).then((res) => {
+            res.clone().json().then((data) => {
+                qrcode.toDataURL(data.otpauth_url, function(err,data){
+                    console.log(data);
+                    document.getElementById("forQRcode").innerHTML = 'Use this QR code for 2FA <img src="' + data + '" alt="QR code"/>';
+                })
+            }).catch(()=>{
+                res.text().then((textData) => {
+                alert(textData);
+                })
+            });
+        });
+    };
 
   render() {
     const { showForm, selectedForm, open, message, severity, loading } =
@@ -119,7 +150,7 @@ class Auth extends React.Component {
     if (showForm) {
       let fields = [];
       if (selectedForm === "login") {
-        fields = ["username", "password"];
+        fields = ["username", "password","OneTimePassword"];
         display = (
           <Form
             fields={fields}
@@ -132,6 +163,7 @@ class Auth extends React.Component {
       } else if (selectedForm === "register") {
         fields = ["username", "password", "name"];
         display = (
+            <div>
           <Form
             fields={fields}
             close={this.closeForm}
@@ -139,7 +171,9 @@ class Auth extends React.Component {
             submit={this.register}
             key={selectedForm}
           />
-        );
+          <div id="forQRcode"/>
+        </div>
+      );
       }
     } else {
       display = (
