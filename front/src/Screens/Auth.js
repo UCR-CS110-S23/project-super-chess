@@ -1,6 +1,5 @@
-import react from "react";
+import React from "react";
 import Form from "../Components/form.js";
-import { Button } from "@mui/material";
 const qrcode = require('qrcode');
 import {
   Button,
@@ -115,32 +114,7 @@ class Auth extends React.Component {
       message: "",
     });
   };
-    register = (data) => {
-        // DONE: write codes to register
-        console.log(data);
-        // let r = JSON.stringify(data);
-        fetch(this.props.server_url+"/api/auth/signup", {
-            method: "POST",
-            mode: 'cors',
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(data) // body data type must match "Content-Type" header above.
-        }).then((res) => {
-            res.clone().json().then((data) => {
-                qrcode.toDataURL(data.otpauth_url, function(err,data){
-                    console.log(data);
-                    document.getElementById("forQRcode").innerHTML = 'Use this QR code for 2FA <img src="' + data + '" alt="QR code"/>';
-                })
-            }).catch(()=>{
-                res.text().then((textData) => {
-                alert(textData);
-                })
-            });
-        });
-    };
+
 
   render() {
     const { showForm, selectedForm, open, message, severity, loading } =
