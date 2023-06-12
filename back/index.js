@@ -197,4 +197,29 @@ io.on("connection", async (socket) => {
       console.error("Error while deleting message:", error);
     }
   });
+
+  // Add an event handler for the "add reaction" event
+  socket.on("add reaction", async ({ id, type }) => {
+    try {
+      // Find the message in the database
+      const message = await Messages.findById(id);
+      if (!message) {
+        throw new Error("Message not found");
+      }
+
+      if (type === "thumbsUp") {
+        message.thumbsUpCount++;
+      } else if (type === "thumbsDown") {
+        message.thumbsDownCount++;
+      }
+
+      // Save the updated message in the database
+      await message.save();
+
+      // Send updated messages to clients
+      sendHistory();
+    } catch (error) {
+      console.error("Error while adding reaction:", error);
+    }
+  });
 });

@@ -12,10 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
+    "emoji-picker-react": "^4.4.9",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "mongoose": "^7.2.1",
+    "node-emoji": "^2.0.2",
     "nodemon": "^2.0.22",
     "socket.io": "^4.6.1"
   },

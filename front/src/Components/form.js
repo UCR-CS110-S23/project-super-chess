@@ -1,63 +1,103 @@
-import react from "react";
-import { Button, TextField } from "@mui/material";
-import './style.css';
+import React from "react";
+import {
+  Button,
+  TextField,
+  Avatar,
+  Typography,
+  Container,
+  Box,
+  // Link,
+  // Grid,
+  CssBaseline,
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import "./style.css";
 
-class Form extends react.Component{
-    constructor(props){
-        super(props);
-        // for each item in props.fields, create an item in this.state.fields
-        let fields = [];
-        for (let i = 0; i < props.fields.length; i++) {
-            fields.push(["", props.fields[i]]);
-        }
-        this.state = {
-            fields: fields,
-        }
+const theme = createTheme();
+
+class Form extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {},
+      showPassword: false,
+    };
+  }
+
+  handleChange = (event, field) => {
+    const { data } = this.state;
+    data[field] = event.target.value;
+    this.setState({ data });
+  };
+
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await this.props.submit(this.state.data);
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    handleChange = (event, index) => {
-        let fields = this.state.fields;
-        fields[index][0] = event.target.value;
-        this.setState({fields: fields});
-    }
-
-    handleSubmit = (event) => {
-        event.preventDefault();
-        let fields = this.state.fields;
-        let data = {};
-        for (let i = 0; i < fields.length; i++) {
-            data[fields[i][1]] = fields[i][0];
-        }
-        this.props.submit(data);
-    }
-
-    render(){
-        return (
-            <div>
-                <div>
-                    <Button onClick={this.props.close}> x </Button>
-                    <h3> {this.props.type} </h3>
-                </div>
-
-                <form onSubmit={this.handleSubmit}>
-                    {this.state.fields.map((field, index) => {
-                        return(
-                            <div>
-                                <TextField 
-                                    variant="standard" 
-                                    key={"auth"+field[1]} 
-                                    label={field[1]} 
-                                    onChange={(event) => this.handleChange(event, index)}
-                                />
-                            </div>
-                        );
-                    })}
-                    <input type="submit"></input>
-                </form>
-
-            </div>
-        );
-    }
+  render() {
+    return (
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              {this.props.type.charAt(0).toUpperCase() +
+                this.props.type.slice(1)}
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={this.handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            >
+              {this.props.fields.map((field, index) => {
+                return (
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    key={"auth" + field}
+                    label={field.charAt(0).toUpperCase() + field.slice(1)}
+                    name={field}
+                    autoComplete={field}
+                    autoFocus={index === 0}
+                    type={field === "password" ? "password" : "text"}
+                    onChange={(event) => this.handleChange(event, field)}
+                  />
+                );
+              })}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                {this.props.type.charAt(0).toUpperCase() +
+                  this.props.type.slice(1)}
+              </Button>
+            </Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
+    );
+  }
 }
 
 export default Form;

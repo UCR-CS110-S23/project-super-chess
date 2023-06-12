@@ -3,27 +3,12 @@ const mongoose = require("mongoose");
 const messageSchema = mongoose.Schema(
   {
     message: {
-      text: {
-        type: String,
-        required: true,
-      },
+      text: String,
     },
-    sender: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    room: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Room",
-      required: true,
-    },
-    reactions: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Reaction",
-      },
-    ],
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    room: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
+    thumbsUpCount: { type: Number, default: 0 },
+    thumbsDownCount: { type: Number, default: 0 },
   },
   {
     timestamps: true,

@@ -16,3 +16,11 @@
     border-radius: 15px;
     background-color: rgb(168, 163, 163);
 }
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
