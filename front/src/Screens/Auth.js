@@ -195,7 +195,7 @@ class Auth extends React.Component {
             align="center"
             gutterBottom
           >
-            Messenger
+            Welcome to our app
           </Typography>
           {display}
           {showForm && (

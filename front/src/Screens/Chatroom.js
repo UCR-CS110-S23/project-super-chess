@@ -1,5 +1,6 @@
 import React from "react";
 import { io } from "socket.io-client";
+
 import {
   AppBar,
   Toolbar,
@@ -102,8 +103,9 @@ class Chatroom extends React.Component {
   };
 
   componentDidMount() {
+    
     this.socket.on("chat message", (messages) => {
-      this.setState({ messages });
+      this.setState({ messages }); 
     });
   }
 
@@ -199,7 +201,7 @@ class Chatroom extends React.Component {
             >
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant="h6">{this.props.room}</Typography>
+            <Typography variant="h6">Room {this.props.room}</Typography>
           </Toolbar>
         </AppBar>
 

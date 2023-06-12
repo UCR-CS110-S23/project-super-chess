@@ -175,15 +175,27 @@ class Lobby extends react.Component {
                 Logout
               </Button>
             </Box>
-
             {this.state.rooms ? (
-              <List>
-                {this.state.rooms.map((room) => (
-                  <ListItem button key={room} onClick={() => this.enter(room)}>
-                    <ListItemText primary={room} />
-                  </ListItem>
-                ))}
-              </List>
+  <List>
+    {this.state.rooms.map((room) => (
+      <ListItem
+        button
+        key={room}
+        onClick={() => this.enter(room)}
+        onMouseEnter={(e) => {
+          e.target.style.backgroundColor = "gray";
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.backgroundColor = "transparent";
+        }}
+        style={{
+          transition: "background-color 0.3s ease",
+        }}
+      >
+        Room {room}
+      </ListItem>
+    ))}
+  </List>
             ) : (
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <CircularProgress />

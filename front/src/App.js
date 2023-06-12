@@ -92,6 +92,7 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        
         <ScreenHandler />
         <IconButton
           style={{

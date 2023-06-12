@@ -161,6 +161,8 @@ io.on("connection", async (socket) => {
       message: { text: txt },
       sender: sender._id,
       room: rm._id,
+      thumbsUp: 0,
+      thumbsDown: 0,
     });
 
     // Save the message to the database
@@ -198,28 +200,25 @@ io.on("connection", async (socket) => {
     }
   });
 
-  // Add an event handler for the "add reaction" event
-  socket.on("add reaction", async ({ id, type }) => {
+  socket.on("thumbs up", async (data) => {
     try {
-      // Find the message in the database
-      const message = await Messages.findById(id);
-      if (!message) {
-        throw new Error("Message not found");
-      }
-
-      if (type === "thumbsUp") {
-        message.thumbsUpCount++;
-      } else if (type === "thumbsDown") {
-        message.thumbsDownCount++;
-      }
-
-      // Save the updated message in the database
+      const message = await Messages.findById(data.messageId);
+      message.thumbsUp += 1;
       await message.save();
-
-      // Send updated messages to clients
-      sendHistory();
+      sendHistory(); // Update history display
     } catch (error) {
-      console.error("Error while adding reaction:", error);
+      console.error("Error while updating thumbs up count:", error);
+    }
+  });
+
+  socket.on("thumbs down", async (data) => {
+    try {
+      const message = await Messages.findById(data.messageId);
+      message.thumbsDown += 1;
+      await message.save();
+      sendHistory(); // Update history display
+    } catch (error) {
+      console.error("Error while updating thumbs down count:", error);
     }
   });
 });
