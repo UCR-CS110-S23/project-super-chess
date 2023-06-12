@@ -39,7 +39,64 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+router.get("/current-username", (req, res) => {
+  if (req.session.authenticated) {
+    res.json({ username: req.session.username, status: true });
+  } else {
+    res.json({ msg: "Not authenticated", status: false });
+  }
+});
+
 //Add change option
+router.put("/change-username", async (req, res) => {
+  const { session } = req;
+  const { currentUsername, newUsername, password } = req.body;
+
+  try {
+    if (!session.authenticated || session.username !== currentUsername) {
+      res
+        .status(401)
+        .json({
+          msg: "User is not logged in or username doesn't match",
+          status: false,
+        });
+      return;
+    }
+
+    const user = await User.findOne({ username: currentUsername });
+
+    if (!user) {
+      res.status(404).json({ msg: "User not found", status: false });
+      return;
+    }
+
+    if (user.password !== password) {
+      res.status(403).json({ msg: "Incorrect password", status: false });
+      return;
+    }
+
+    const existingUser = await User.findOne({ username: newUsername });
+
+    if (existingUser) {
+      res.status(409).json({ msg: "Username already taken", status: false });
+      return;
+    }
+
+    user.username = newUsername;
+    const updatedUser = await user.save();
+
+    session.username = newUsername;
+
+    res.json({
+      msg: "Username updated successfully",
+      username: newUsername,
+      status: true,
+    });
+  } catch (error) {
+    console.error("Error updating username:", error);
+    res.status(500).json({ msg: "Failed to update username", status: false });
+  }
+});
 
 // Set up a route for the logout page
 router.get("/logout", (req, res) => {
