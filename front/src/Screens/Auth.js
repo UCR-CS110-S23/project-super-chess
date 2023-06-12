@@ -189,6 +189,7 @@ class Auth extends React.Component {
             </Snackbar>
           )}
           <Typography
+            sx={{ mb: 20 }}
             // anchorOrigin={{ vertical: "top" }}
             variant="h4"
             component="h1"
