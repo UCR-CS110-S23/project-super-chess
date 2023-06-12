@@ -121,7 +121,7 @@ class Chatroom extends React.Component {
 
   render() {
     return (
-      <div>
+      <div class="chatroom">
         <h1>{this.props.room}</h1>
         <ul>
           {this.state.messages.map((m) => {

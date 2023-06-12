@@ -83,7 +83,7 @@ class Auth extends react.Component{
                 </div>              ;
         }
         return(
-            <div>
+            <div class="welcome">
                 <h1> Welcome to our website! </h1>
                 {display}
             </div>
