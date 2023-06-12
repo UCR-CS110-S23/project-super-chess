@@ -2,6 +2,7 @@ import react from "react";
 import { Button, TextField } from "@mui/material";
 import './style.css';
 
+
 class Form extends react.Component{
     constructor(props){
         super(props);
@@ -10,6 +11,7 @@ class Form extends react.Component{
         for (let i = 0; i < props.fields.length; i++) {
             fields.push(["", props.fields[i]]);
         }
+
         this.state = {
             fields: fields,
         }
@@ -53,6 +55,7 @@ class Form extends react.Component{
                         );
                     })}
                     <input type="submit"></input>
+
                 </form>
 
             </div>

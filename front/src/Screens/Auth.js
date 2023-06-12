@@ -1,15 +1,19 @@
 import react from "react";
 import Form from "../Components/form.js";
 import { Button } from "@mui/material";
+const qrcode = require('qrcode');
 
 class Auth extends react.Component{
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             showForm: false,
             selectedForm: undefined,
         }
+
     }
+
+
 
     closeForm = () => {
         this.setState({showForm: false});
@@ -18,6 +22,7 @@ class Auth extends react.Component{
     login = (data) => {
         // DONE: write codes to login
         console.log(data);
+
         fetch(this.props.server_url+"/api/auth/login", {
             method: "POST",
             mode: 'cors',
@@ -54,7 +59,10 @@ class Auth extends react.Component{
             body: JSON.stringify(data) // body data type must match "Content-Type" header above.
         }).then((res) => {
             res.clone().json().then((data) => {
-                alert(data.username);
+                qrcode.toDataURL(data.otpauth_url, function(err,data){
+                    console.log(data);
+                    document.getElementById("forQRcode").innerHTML = 'Use this QR code for 2FA <img src="' + data + '" alt="QR code"/>';
+                })
             }).catch(()=>{
                 res.text().then((textData) => {
                 alert(textData);
@@ -68,24 +76,30 @@ class Auth extends react.Component{
         if (this.state.showForm){
             let fields = [];
             if (this.state.selectedForm === "login"){
-                fields = ['username', 'password'];
+                fields = ['username', 'password', 'OneTimePassword'];
+                console.log();
                 display = <Form fields={fields} close={this.closeForm} type="login" submit={this.login} key={this.state.selectedForm}/>;
             }
             else if (this.state.selectedForm === "register"){
                 fields = [ 'username', 'password', 'name'];
-                display = <Form fields={fields} close={this.closeForm} type="register" submit={this.register} key={this.state.selectedForm}/>;
+                display =
+                    <div>
+                    <Form fields={fields} close={this.closeForm} type="register" submit={this.register} key={this.state.selectedForm}/>
+                    <div id="forQRcode"></div>
+                </div>;
             }   
         }
         else{
             display = <div>
                 <Button onClick={() => this.setState({showForm: true, selectedForm:"login"})}> Login </Button>
                 <Button onClick={() => this.setState({showForm: true, selectedForm: "register"})}> Register </Button>
-                </div>              ;
+                </div>;
         }
         return(
             <div class="welcome">
                 <h1 class="title"> Welcome to our website! </h1>
                 {display}
+
             </div>
         );
     }
