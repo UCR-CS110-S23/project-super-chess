@@ -1,5 +1,6 @@
 import react from "react";
 import { Button, TextField } from "@mui/material";
+import './style.css';
 
 class Form extends react.Component{
     constructor(props){
