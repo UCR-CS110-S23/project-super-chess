@@ -28,6 +28,9 @@ class Lobby extends react.Component {
       openSnackbar: false,
       snackbarSeverity: "info",
       snackbarMessage: "",
+      editingUsername: false,
+      newUsername: "",
+      username: "",
     };
   }
 
@@ -56,6 +59,7 @@ class Lobby extends react.Component {
         this.setState({ rooms: data });
       });
     });
+    this.getCurrentUsername();
   }
 
   logout = () => {
@@ -148,6 +152,38 @@ class Lobby extends react.Component {
     // alert(roomId);
   };
 
+  startEditingUsername = () => {
+    this.setState({ editingUsername: true, newUsername: this.state.username });
+  };
+
+  handleNewUsernameChange = (event) => {
+    this.setState({ newUsername: event.target.value });
+  };
+
+  handleEditSubmit = (event) => {
+    event.preventDefault();
+    this.changeUsername(this.state.newUsername);
+  };
+
+  getCurrentUsername = () => {
+    fetch(this.props.server_url + "/api/auth/current-username", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      res.json().then((data) => {
+        if (data.status) {
+          this.setState({ username: data.username });
+        } else {
+          this.showAlert(data.msg, "error");
+        }
+      });
+    });
+  };
+
+ 
   render() {
     return (
       <div style={containerStyle}>
@@ -170,6 +206,40 @@ class Lobby extends react.Component {
             <Typography align="center" variant="h4" component="h1" gutterBottom>
               Lobby
             </Typography>
+            {this.state.editingUsername ? (
+              <form onSubmit={this.handleNewUsernameChange}>
+                <TextField
+                  id="change-username"
+                  label="New Username"
+                  name="newUsername"
+                  variant="outlined"
+                  fullWidth
+                  value={this.state.newUsername}
+                  onChange={this.handleNewUsernameChange}
+                />
+                <Box sx={{ mt: 2 }}>
+                  <Button variant="contained" type="submit" fullWidth>
+                    Change Username
+                  </Button>
+                </Box>
+              </form>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mb: 4,
+                }}
+              >
+                <Typography variant="h6">
+                  User: {this.state.username}
+                </Typography>
+                <Button variant="contained" onClick={this.startEditingUsername}>
+                  Edit Username
+                </Button>
+              </Box>
+            )}
             <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
               <Button variant="outlined" onClick={this.logout}>
                 Logout
