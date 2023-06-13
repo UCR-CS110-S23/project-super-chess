@@ -67,10 +67,16 @@ Our design approach was focused on creating an intuitive and aesthetically pleas
 
 ### Registration and Login
 
-![image](https://github.com/UCR-CS110-S23/project-super-chess/assets/49822431/b27fb109-ba61-40d4-af5b-e13aa5057014)
-
-
-![image](https://github.com/UCR-CS110-S23/project-super-chess/assets/49822431/05335204-2b52-4a38-85f3-36caee247cb8)
+<table>
+  <tr>
+    <td>
+        <img src="https://github.com/UCR-CS110-S23/project-super-chess/assets/49822431/b27fb109-ba61-40d4-af5b-e13aa5057014" alt="image 1">
+    </td>
+    <td>
+        <img src="https://github.com/UCR-CS110-S23/project-super-chess/assets/49822431/05335204-2b52-4a38-85f3-36caee247cb8" alt="image 2">
+    </td>
+  </tr>
+</table>
 
 <!-- ### Chatroom Lobby
 
