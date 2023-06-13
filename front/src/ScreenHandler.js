@@ -5,7 +5,6 @@ import Chatroom from "./Screens/Chatroom.js";
 
 const server_url = "http://localhost:3001";
 
-
 class ScreenHandler extends react.Component{
     constructor(props){
         super(props);

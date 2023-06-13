@@ -60,9 +60,6 @@ class Auth extends react.Component {
   };
 
   login = (data) => {
-    // DONE: write codes to login
-    console.log(data);
-
     fetch(this.props.server_url + "/api/auth/login", {
       method: "POST",
       mode: "cors",
@@ -71,11 +68,10 @@ class Auth extends react.Component {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(data), // body data type must match "Content-Type" header above.
+      body: JSON.stringify(data),
     }).then((res) => {
       res.json().then((data) => {
         if (data.msg === "Logged in") {
-          // this.props.changeUser(data.username);
           this.props.changeScreen("lobby");
         } else {
           this.handleSnackbarOpen(data.msg, "error");
@@ -85,8 +81,6 @@ class Auth extends react.Component {
   };
 
   register = (data) => {
-    // DONE: write codes to register
-    console.log(data);
     fetch(this.props.server_url + "/api/auth/signup", {
       method: "POST",
       mode: "cors",
@@ -95,14 +89,13 @@ class Auth extends react.Component {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(data), // body data type must match "Content-Type" header above.
+      body: JSON.stringify(data),
     }).then((res) => {
       res
         .clone()
         .json()
         .then((data) => {
           qrcode.toDataURL(data.otpauth_url, function(err, data) {
-            console.log(data);
             document.getElementById("forQRcode").innerHTML =
               '<img src="' +
               data +
@@ -132,10 +125,8 @@ class Auth extends react.Component {
       let fields = [];
       if (this.state.selectedForm === "login") {
         fields = ["username", "password", "OneTimePassword"];
-        console.log();
         display = (
           <Form
-            // sx={{ mt: 10 }}
             fields={fields}
             close={this.closeForm}
             type="Login"
@@ -148,7 +139,6 @@ class Auth extends react.Component {
         display = (
           <div>
             <Form
-              //  sx={{ mb: 10 }}
               fields={fields}
               close={this.closeForm}
               type="Register"
@@ -169,7 +159,7 @@ class Auth extends react.Component {
             variant="contained"
             size="large"
             sx={{ marginRight: 2 }}
-            disabled={loading} // Disable button when loading
+            disabled={loading}
           >
             {loading ? <CircularProgress size={24} /> : "Login"}
           </Button>
@@ -179,7 +169,7 @@ class Auth extends react.Component {
             }
             variant="outlined"
             size="large"
-            disabled={loading} // Disable button when loading
+            disabled={loading}
           >
             {loading ? <CircularProgress size={24} /> : "Register"}
           </Button>
@@ -188,51 +178,47 @@ class Auth extends react.Component {
     }
     return (
       <div style={containerStyle}>
-        <div className="welcome">
-          {open && (
-            <Snackbar
-              open={open}
-              autoHideDuration={6000}
-              onClose={this.handleSnackbarClose}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            >
-              <Alert
-                onClose={this.handleSnackbarClose}
-                severity={severity}
-                sx={{ width: "100%" }}
-              >
-                {message}
-              </Alert>
-            </Snackbar>
-          )}
-          <Typography
-            sx={{ mb: 5 }}
-            // anchorOrigin={{ vertical: "top" }}
-            variant="h4"
-            component="h1"
-            align="center"
-            gutterBottom
+        {open && (
+          <Snackbar
+            open={open}
+            autoHideDuration={6000}
+            onClose={this.handleSnackbarClose}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
           >
-            Messenger
-          </Typography>
-          {display}
-          {showForm && (
-            <Grid container mt={2}>
-              <Grid item xs>
-                <Link
-                  href="#"
-                  variant="body2"
-                  onClick={this.toggleForm}
-                  sx={{ textDecoration: "underline", cursor: "pointer" }}
-                >
-                  {selectedForm === "login"
-                    ? "Don't have an account? Sign Up"
-                    : "Already have an account? Sign In"}
-                </Link>
-              </Grid>
+            <Alert
+              onClose={this.handleSnackbarClose}
+              severity={severity}
+              sx={{ width: "100%" }}
+            >
+              {message}
+            </Alert>
+          </Snackbar>
+        )}
+        <Typography
+          variant="h4"
+          component="h1"
+          align="center"
+          gutterBottom
+        >
+          Messenger
+        </Typography>
+        {display}
+        {showForm && (
+          <Grid container mt={2}>
+            <Grid item xs>
+              <Link
+                href="#"
+                variant="body2"
+                onClick={this.toggleForm}
+                sx={{ textDecoration: "underline", cursor: "pointer" }}
+              >
+                {selectedForm === "login"
+                  ? "Don't have an account? Sign Up"
+                  : "Already have an account? Sign In"}
+              </Link>
             </Grid>
-          )}
-        </div>
+          </Grid>
+        )}
       </div>
     );
   }

@@ -23,7 +23,7 @@ const io = socketIO(server, {
     origin: "*",
   },
 });
-app.use(cors({ origin: "https://cs110messengerapp.herokuapp.com/", credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true }));
