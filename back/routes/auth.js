@@ -83,14 +83,14 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// router.get("/current-username", (req, res) => {
-//   if (req.session.authenticated) {
-//     res.json({ username: req.session.username, status: true });
-//   }
-//   // } else {
-//   //   res.json({ msg: "Not authenticated", status: false });
-//   // }
-// });
+router.get("/current-username", (req, res) => {
+  if (req.session.authenticated) {
+    res.json({ username: req.session.username, status: true });
+  }
+  // } else {
+  //   res.json({ msg: "Not authenticated", status: false });
+  // }
+});
 
 //Add change option
 // router.put("/change-username", async (req, res) => {
