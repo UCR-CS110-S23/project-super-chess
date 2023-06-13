@@ -13,7 +13,7 @@ import {
   ListItem,
   Avatar,
 } from "@mui/material";
-// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -198,7 +198,7 @@ class Chatroom extends React.Component {
               aria-label="back"
               onClick={this.handleGoBack}
             >
-              {/* <ArrowBackIcon /> */}
+              <ArrowBackIcon />
             </IconButton>
             <Typography variant="h6">Room {this.props.room}</Typography>
           </Toolbar>
