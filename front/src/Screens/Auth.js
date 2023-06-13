@@ -39,7 +39,11 @@ class Auth extends react.Component {
     });
   };
 
-  handleSnackbarClose = () => {
+  handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
     this.setState({
       open: false,
       message: "",
@@ -74,7 +78,7 @@ class Auth extends react.Component {
           // this.props.changeUser(data.username);
           this.props.changeScreen("lobby");
         } else {
-          alert(data.msg);
+          this.handleSnackbarOpen(data.msg, "error");
         }
       });
     });
@@ -97,7 +101,7 @@ class Auth extends react.Component {
         .clone()
         .json()
         .then((data) => {
-          qrcode.toDataURL(data.otpauth_url, function (err, data) {
+          qrcode.toDataURL(data.otpauth_url, function(err, data) {
             console.log(data);
             document.getElementById("forQRcode").innerHTML =
               '<img src="' +
@@ -107,15 +111,21 @@ class Auth extends react.Component {
         })
         .catch(() => {
           res.text().then((textData) => {
-            alert(textData);
+            this.handleSnackbarOpen(textData, "error");
           });
         });
     });
   };
 
   render() {
-    const { showForm, selectedForm, open, message, severity, loading } =
-      this.state;
+    const {
+      showForm,
+      selectedForm,
+      open,
+      message,
+      severity,
+      loading,
+    } = this.state;
 
     let display = null;
     if (this.state.showForm) {
