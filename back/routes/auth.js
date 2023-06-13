@@ -86,9 +86,10 @@ router.post("/signup", async (req, res) => {
 router.get("/current-username", (req, res) => {
   if (req.session.authenticated) {
     res.json({ username: req.session.username, status: true });
-  } else {
-    res.json({ msg: "Not authenticated", status: false });
   }
+  // } else {
+  //   res.json({ msg: "Not authenticated", status: false });
+  // }
 });
 
 //Add change option
