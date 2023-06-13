@@ -79,7 +79,7 @@ Our design approach was focused on creating an intuitive and aesthetically pleas
 </table>
 
 <!-- ### Chatroom Lobby
-
+![image](https://github.com/UCR-CS110-S23/project-super-chess/assets/49822431/3809198a-3a12-4b7a-892e-cc28df0dc93d)
 
 ### Chatroom -->
-
+![image](https://github.com/UCR-CS110-S23/project-super-chess/assets/49822431/4476d8ed-a0e3-4caa-8d2b-e965097028e0)
