@@ -59,7 +59,7 @@ class Lobby extends react.Component {
         this.setState({ rooms: data });
       });
     });
-    this.getCurrentUsername();
+    // this.getCurrentUsername();
   }
 
   logout = () => {
@@ -205,7 +205,8 @@ class Lobby extends react.Component {
             <Typography align="center" variant="h4" component="h1" gutterBottom>
               Lobby
             </Typography>
-            {this.state.editingUsername ? (
+            {/* <Typography variant="h6">User: {this.state.username}</Typography> */}
+            {/* {this.state.editingUsername ? (
               <form onSubmit={this.handleNewUsernameChange}>
                 <TextField
                   id="change-username"
@@ -230,15 +231,13 @@ class Lobby extends react.Component {
                   alignItems: "center",
                   mb: 4,
                 }}
-              >
-                <Typography variant="h6">
-                  User: {this.state.username}
-                </Typography>
-                {/* <Button variant="contained" onClick={this.startEditingUsername}>
+              > */}
+
+            {/* <Button variant="contained" onClick={this.startEditingUsername}>
                   Edit Username
                 </Button> */}
-              </Box>
-            )}
+            {/* </Box>
+            )} */}
             <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
               <Button variant="outlined" onClick={this.logout}>
                 Logout
